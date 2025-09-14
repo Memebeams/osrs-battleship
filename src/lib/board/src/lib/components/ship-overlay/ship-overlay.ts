@@ -1,22 +1,26 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, signal } from '@angular/core';
-
-interface ShipSquare {
-  included: boolean;
-  hit: boolean;
-}
+import { Component, computed, inject, input } from '@angular/core';
+import { Ship } from '../../domain/ship';
+import { BoardStore } from '../../store/board.store';
 
 @Component({
-  selector: 'bs-ship',
+  selector: 'bs-ship-overlay',
   imports: [CommonModule],
-  templateUrl: './ship.html',
-  styleUrl: './ship.css',
+  templateUrl: './ship-overlay.html',
 })
-export class Ship {
-  squares = signal<ShipSquare[][]>([]);
+export class ShipOverlay {
+  readonly store = inject(BoardStore);
+  ship = input.required<Ship>();
+
+  gridStyles = computed(() => ({
+    'grid-template-columns': `repeat(${this.ship().squares[0].length}, 1fr)`,
+    'grid-template-rows': `repeat(${this.ship().squares.length}, 1fr)`,
+    top: `calc(${this.ship().coords?.y ?? 1} * 100%`,
+    left: `calc(${this.ship().coords?.x ?? 1} * 100%`,
+  }));
 
   styles = computed(() => {
-    return this.squares().map((row, rowIndex) =>
+    return this.ship().squares.map((row, rowIndex) =>
       row.map((square, colIndex) => {
         if (!square.included) {
           return {};
@@ -26,9 +30,9 @@ export class Ship {
         const isEdgeOrNotIncluded = (r: number, c: number) =>
           r < 0 ||
           c < 0 ||
-          r >= this.squares().length ||
+          r >= this.ship().squares.length ||
           c >= row.length ||
-          !this.squares()[r][c].included;
+          !this.ship().squares[r][c].included;
 
         if (isEdgeOrNotIncluded(rowIndex - 1, colIndex)) {
           borders['borderTop'] = '1px dashed lightgrey';
@@ -50,18 +54,4 @@ export class Ship {
       })
     );
   });
-
-  constructor() {
-    const squares = Array.from({ length: 3 }, () =>
-      Array.from({ length: 3 }, () => ({ included: false, hit: false }))
-    );
-
-    // Example: Mark some squares as part of the ship
-    squares[0][1].included = true;
-    squares[1][0].included = true;
-    squares[1][1].included = true;
-    squares[1][2].included = true;
-
-    this.squares.set(squares);
-  }
 }
