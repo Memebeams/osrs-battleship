@@ -1,0 +1,11 @@
+<div class="grid grid-cols-3 grid-rows-3 relative top-[-33%] left-[-33%] z-0">
+  @for (row of squares(); let y = $index; track $index) { @for (col of row; let
+  x = $index; track $index) {
+  <div
+    class="aspect-square flex justify-center items-center min-w-[64px] min-h-[64px]"
+    [ngStyle]="styles()[y][x]"
+  >
+    <!-- {{ x }},{{ y }} -->
+  </div>
+  } }
+</div>

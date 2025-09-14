@@ -1,0 +1,32 @@
+.bg-blur {
+  position: fixed;
+  width: 1200px;
+  height: 1200px;
+  border-radius: 50%;
+  filter: blur(600px);
+  opacity: 0.13;
+  z-index: -1;
+}
+
+.bg-blur.orange {
+  background: #ffa6203c;
+  top: -10%;
+}
+
+.bg-blur.blue {
+  background: #3575ff40;
+  top: -20%;
+  left: 50%;
+}
+
+.bg-blur.purple {
+  background: #6940f069;
+  top: -20%;
+  left: 20%;
+}
+
+.bg-blur.green {
+  background: #3fff9250;
+  top: 60%;
+  left: 40%;
+}

@@ -1,0 +1,30 @@
+@let width = 20; @let height = 20;
+<div class="flex flex-col items-center">
+  <div class="my-[2rem]">
+    <h1 class="eagle-lake-regular text-gray-100 text-8xl text-center">
+      Board Layout
+    </h1>
+  </div>
+  <div class="grid board-grid mx-[16px]">
+    @for (row of [].constructor(height + 2); let y = $index; track $index) { @if
+    (y === 0 || y === height + 1) {
+    <div></div>
+    @for (col of [].constructor(width); let x = $index; track $index) {
+    <div class="text-white text-center my-auto">
+      {{ String.fromCharCode(65 + x) }}
+    </div>
+    }
+    <div></div>
+    } @else {
+    <div class="text-white text-center my-auto">{{ y }}</div>
+    @for (col of [].constructor(width); let x = $index; track $index) {
+    <div class="relative">
+      @if (x === 2 && y === 2) {
+      <bs-ship class="absolute w-[300%]"></bs-ship> }
+      <bs-cell></bs-cell>
+    </div>
+    }
+    <div class="text-white text-center my-auto">{{ y }}</div>
+    } }
+  </div>
+</div>
