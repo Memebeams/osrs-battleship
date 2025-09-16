@@ -1,3 +1,4 @@
+@let vm = viewModel();
 <div class="flex flex-col items-center">
   <div class="my-[2rem]">
     <h1 class="eagle-lake-regular text-gray-100 text-8xl text-center">
@@ -6,7 +7,7 @@
   </div>
   <div class="grid mx-[16px] relative" [ngStyle]="boardStyles()">
     <div class="absolute top-[40px] left-[40px] right-[40px] bottom-[40px] z-0">
-      @for(ship of store.randomShips(); let i = $index; track $index) {
+      @for(ship of vm.ships; let i = $index; track $index) {
       <bs-ship-overlay
         class="absolute"
         [ship]="ship"
@@ -14,24 +15,39 @@
       ></bs-ship-overlay>
       }
     </div>
-    @for (row of [].constructor(store.height() + 2); let y = $index; track
-    $index) { @if (y === 0 || y === store.height() + 1) {
+    <!-- Labels at top -->
     <div></div>
-    @for (col of [].constructor(store.width()); let x = $index; track $index) {
+    @for (col of [].constructor(vm.width); let x = $index; track $index) {
     <div class="text-white text-center my-auto">
       {{ String.fromCharCode(65 + x) }}
     </div>
     }
     <div></div>
-    } @else {
-    <div class="text-white text-center my-auto">{{ y }}</div>
-    @for (col of [].constructor(store.width()); let x = $index; track $index) {
+
+    <!-- Board rows -->
+    @for (row of vm.cells; let y = $index; track $index) {
+    <!-- Left label -->
+    <div class="text-white text-center my-auto">{{ y + 1 }}</div>
+
+    <!-- Cells -->
+    @for (cell of row; let x = $index; track $index) {
     <div class="relative">
-      <!-- Slot -->
-      <bs-cell></bs-cell>
+      <bs-cell [cell]="cell" />
     </div>
     }
-    <div class="text-white text-center my-auto">{{ y }}</div>
-    } }
+
+    <!-- Right label -->
+    <div class="text-white text-center my-auto">{{ y + 1 }}</div>
+
+    }
+
+    <!-- Labels at bottom -->
+    <div></div>
+    @for (col of [].constructor(vm.width); let x = $index; track $index) {
+    <div class="text-white text-center my-auto">
+      {{ String.fromCharCode(65 + x) }}
+    </div>
+    }
+    <div></div>
   </div>
 </div>

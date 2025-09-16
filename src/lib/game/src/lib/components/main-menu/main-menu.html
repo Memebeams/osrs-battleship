@@ -1,0 +1,34 @@
+@let vm = viewModel();
+<nz-layout class="min-h-full">
+  <!-- <nz-header> Test </nz-header> -->
+  <nz-content class="m-auto max-w-[800px] flex flex-col justify-center">
+    <form
+      (ngSubmit)="login()"
+      class="m-y-auto p-5 bg-slate-800/50 rounded border-2 border-slate-700/50 flex flex-col gap-4"
+    >
+      <h3 nz-typography class="text-center p-2">Team Battleship</h3>
+      @if (vm.failed) {
+      <nz-alert nzType="error" nzMessage="Failed to log in." />
+      }
+      <input
+        class="bg-slate-800 py-1 px-2 rounded border-2 border-slate-700 focus:outline focus:outline-slate-500"
+        nz-input
+        name="password"
+        type="password"
+        [(ngModel)]="password"
+        (keyup.enter)="login()"
+        placeholder="Enter your team password"
+      />
+      <button
+        nz-button
+        nzType="primary"
+        [nzLoading]="vm.loading"
+        type="submit"
+        class="bg-green-700 hover:bg-green-600 focus:bg-teal-700 focus:hover:bg-teal-600 p-1 rounded font-bold"
+      >
+        Log In
+      </button>
+    </form>
+  </nz-content>
+  <!-- <nz-footer> Test Footer </nz-footer> -->
+</nz-layout>

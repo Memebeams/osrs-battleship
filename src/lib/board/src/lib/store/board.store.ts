@@ -1,37 +1,62 @@
-import { computed } from '@angular/core';
-import { signalStore, withComputed, withState } from '@ngrx/signals';
-import { shipSet } from '../constants/mock-ships';
-import { Ship } from '../domain/ship';
+import { computed, inject } from '@angular/core';
+import { rxResource } from '@angular/core/rxjs-interop';
+import {
+  patchState,
+  signalStore,
+  withComputed,
+  withMethods,
+  withProps,
+  withState,
+} from '@ngrx/signals';
+import {
+  BattleshipService,
+  BattleshipStore,
+  Cell,
+  Ship,
+} from '@osrs-battleship/shared';
+import { shipSet } from '../mocks/mock-ships';
 
 export interface BoardState {
-  width: number;
-  height: number;
+  id: string | undefined;
   ships: Ship[];
 }
 
 export const initialState: BoardState = {
-  width: 20,
-  height: 20,
+  id: undefined,
   ships: shipSet,
 };
 
 export const BoardStore = signalStore(
   withState(initialState),
+  withProps(() => ({
+    bsStore: inject(BattleshipStore),
+    service: inject(BattleshipService),
+  })),
+  withProps((store) => ({
+    board$: rxResource({
+      params: () => {
+        return store.bsStore.token() ?? undefined;
+      },
+      stream: () => store.service.getBoard(),
+    }),
+  })),
   withComputed((store) => ({
-    randomShips: computed(() =>
-      store.ships().map((ship) => ({
-        ...ship,
-        coords: {
-          x:
-            Math.floor(
-              Math.random() * (store.width() - ship.squares[0].length)
-            ) + 1,
-          y:
-            Math.floor(Math.random() * (store.height() - ship.squares.length)) +
-            1,
-        },
-      }))
+    cells: computed(() =>
+      store.board$.hasValue()
+        ? store.board$.value().board.cells
+        : ([] as Cell[][])
     ),
+    width: computed(() =>
+      store.board$.hasValue() ? store.board$.value().board.width : 0
+    ),
+    height: computed(() =>
+      store.board$.hasValue() ? store.board$.value().board.height : 0
+    ),
+  })),
+  withMethods((store) => ({
+    setId: (id: string) => {
+      patchState(store, { id });
+    },
   }))
 );
 

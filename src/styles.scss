@@ -2,6 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
+@import 'node_modules/ng-zorro-antd/ng-zorro-antd.dark.css';
+
+.ant-layout {
+  background: transparent;
+}
+
+.ant-layout-footer,
+.ant-layout-header {
+  background: transparent;
+  padding: 0;
+  height: auto;
+  line-height: inherit;
+}
+
+.ant-btn-primary {
+  border: 0;
+}
+
 .eagle-lake-regular {
   font-family: 'Eagle Lake', serif;
   font-weight: 400;

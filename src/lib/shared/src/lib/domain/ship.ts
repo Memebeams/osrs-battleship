@@ -1,12 +1,3 @@
-export enum ShipType {
-  Plus = 'plus',
-  Line = 'line',
-  C = 'c',
-  T = 't',
-  P = 'p',
-  L = 'l',
-}
-
 export interface ShipSquare {
   included: boolean; // number of 90 degree clockwise rotations
 }

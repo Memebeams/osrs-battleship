@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, input } from '@angular/core';
-import { Ship } from '../../domain/ship';
+import { Ship } from '@osrs-battleship/shared';
 
 @Component({
   selector: 'bs-ship-preview',

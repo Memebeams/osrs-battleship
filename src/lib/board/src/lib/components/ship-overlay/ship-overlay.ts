@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject, input } from '@angular/core';
-import { Ship } from '../../domain/ship';
+import { Ship } from '@osrs-battleship/shared';
 import { BoardStore } from '../../store/board.store';
 
 @Component({

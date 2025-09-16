@@ -1,20 +1,28 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject } from '@angular/core';
-import { Ship } from '../../domain/ship';
+import { BattleshipService, Ship } from '@osrs-battleship/shared';
 import { BoardStore } from '../../store/board.store';
-import { Cell } from '../cell/cell';
+import { CellComponent } from '../cell/cell';
 import { ShipOverlay } from '../ship-overlay/ship-overlay';
 
 @Component({
   selector: 'bs-board',
-  imports: [CommonModule, Cell, ShipOverlay],
-  providers: [BoardStore],
+  imports: [CommonModule, CellComponent, ShipOverlay],
+  providers: [BoardStore, BattleshipService],
   templateUrl: './board.html',
 })
-export class Board {
+export class BoardComponent {
   readonly String = String;
 
   readonly store = inject(BoardStore);
+
+  readonly viewModel = computed(() => ({
+    // ships: this.store.ships(),
+    ships: [],
+    width: this.store.width(),
+    height: this.store.height(),
+    cells: this.store.cells(),
+  }));
 
   boardStyles = computed(() => ({
     'grid-template-columns': `40px repeat(${this.store.width()}, 1fr) 40px`,
