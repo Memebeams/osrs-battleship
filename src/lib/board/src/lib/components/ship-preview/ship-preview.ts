@@ -6,10 +6,14 @@ import { Ship } from '@osrs-battleship/shared';
   selector: 'bs-ship-preview',
   imports: [CommonModule],
   templateUrl: './ship-preview.html',
-  styleUrl: './ship-preview.css',
 })
 export class ShipPreview {
   readonly ship = input.required<Ship>();
+
+  readonly gridStyles = computed(() => ({
+    'grid-template-columns': `repeat(${this.ship().squares[0].length}, 1fr)`,
+    'grid-template-rows': `repeat(${this.ship().squares.length}, 1fr)`,
+  }));
 
   styles = computed(() => {
     return this.ship().squares.map((row, rowIndex) =>
@@ -27,20 +31,22 @@ export class ShipPreview {
           !this.ship().squares[r][c].included;
 
         if (isEdgeOrNotIncluded(rowIndex - 1, colIndex)) {
-          borders['borderTop'] = '1px dashed lightgrey';
+          borders['borderTop'] = '2px dashed grey';
         }
         if (isEdgeOrNotIncluded(rowIndex + 1, colIndex)) {
-          borders['borderBottom'] = '1px dashed lightgrey';
+          borders['borderBottom'] = '2px dashed grey';
         }
         if (isEdgeOrNotIncluded(rowIndex, colIndex - 1)) {
-          borders['borderLeft'] = '1px dashed lightgrey';
+          borders['borderLeft'] = '2px dashed grey';
         }
         if (isEdgeOrNotIncluded(rowIndex, colIndex + 1)) {
-          borders['borderRight'] = '1px dashed lightgrey';
+          borders['borderRight'] = '2px dashed grey';
         }
 
         return {
           backgroundColor: 'rgba(211, 211, 211, 0.1)', // Transparent light grey
+          color: 'grey',
+          cursor: 'default',
           ...borders,
         };
       })

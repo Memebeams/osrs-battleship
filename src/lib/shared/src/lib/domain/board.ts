@@ -5,5 +5,5 @@ export interface Board {
   width: number;
   height: number;
   cells: Cell[][];
-  ships: { [key in ShipType]: number };
+  ships: Record<ShipType, number>;
 }

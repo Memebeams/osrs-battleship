@@ -1,10 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Board } from '../domain/board';
+import { Ship, ShipType } from '../domain/ship';
 import { Config } from '../environments/config';
 
 export interface BoardResponse {
-  // shipTypes: Record<string, ShipSquare[][]>;
+  shipTypes: { [key in ShipType]: Ship };
   // ships: Record<string, Ship[]>;
   board: Board;
   teamBoard: {

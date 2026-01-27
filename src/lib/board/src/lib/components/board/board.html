@@ -1,12 +1,17 @@
 @let vm = viewModel();
-<div class="flex flex-col items-center">
-  <div class="my-[2rem]">
+<div class="flex flex-col items-center mt-[4rem]">
+  <div class="mb-[4rem]">
     <h1 class="eagle-lake-regular text-gray-100 text-8xl text-center">
       Board Layout
     </h1>
   </div>
+  <div class="flex flex-row items-center gap-8 mb-[4rem]">
+    @for(ship of vm.ships; let i = $index; track $index) {
+    <bs-ship-preview [ship]="ship" />
+    }
+  </div>
   <div class="grid mx-[16px] relative" [ngStyle]="boardStyles()">
-    <div class="absolute top-[40px] left-[40px] right-[40px] bottom-[40px] z-0">
+    <!-- <div class="absolute top-[40px] left-[40px] right-[40px] bottom-[40px] z-0">
       @for(ship of vm.ships; let i = $index; track $index) {
       <bs-ship-overlay
         class="absolute"
@@ -14,7 +19,7 @@
         [ngStyle]="getShipStyles(ship)"
       ></bs-ship-overlay>
       }
-    </div>
+    </div> -->
     <!-- Labels at top -->
     <div></div>
     @for (col of [].constructor(vm.width); let x = $index; track $index) {

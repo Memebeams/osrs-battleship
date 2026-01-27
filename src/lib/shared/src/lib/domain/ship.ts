@@ -12,8 +12,11 @@ export enum ShipType {
 }
 
 export interface Ship {
+  id?: string;
   squares: ShipSquare[][];
-  name: string;
+}
+
+export interface TeamShip extends Ship {
   coords?: { x: number; y: number };
 }
 

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject, input } from '@angular/core';
-import { Ship } from '@osrs-battleship/shared';
+import { TeamShip } from '@osrs-battleship/shared';
 import { BoardStore } from '../../store/board.store';
 
 @Component({
@@ -10,7 +10,7 @@ import { BoardStore } from '../../store/board.store';
 })
 export class ShipOverlay {
   readonly store = inject(BoardStore);
-  ship = input.required<Ship>();
+  ship = input.required<TeamShip>();
 
   gridStyles = computed(() => ({
     'grid-template-columns': `repeat(${this.ship().squares[0].length}, 1fr)`,

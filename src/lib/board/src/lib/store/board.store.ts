@@ -1,62 +1,51 @@
 import { computed, inject } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
-import {
-  patchState,
-  signalStore,
-  withComputed,
-  withMethods,
-  withProps,
-  withState,
-} from '@ngrx/signals';
+import { signalStore, withComputed, withProps } from '@ngrx/signals';
 import {
   BattleshipService,
-  BattleshipStore,
   Cell,
   Ship,
+  ShipType,
 } from '@osrs-battleship/shared';
-import { shipSet } from '../mocks/mock-ships';
-
-export interface BoardState {
-  id: string | undefined;
-  ships: Ship[];
-}
-
-export const initialState: BoardState = {
-  id: undefined,
-  ships: shipSet,
-};
 
 export const BoardStore = signalStore(
-  withState(initialState),
   withProps(() => ({
-    bsStore: inject(BattleshipStore),
     service: inject(BattleshipService),
   })),
   withProps((store) => ({
-    board$: rxResource({
-      params: () => {
-        return store.bsStore.token() ?? undefined;
-      },
+    boardRequest$: rxResource({
       stream: () => store.service.getBoard(),
     }),
   })),
   withComputed((store) => ({
-    cells: computed(() =>
-      store.board$.hasValue()
-        ? store.board$.value().board.cells
-        : ([] as Cell[][])
+    board: computed(() =>
+      store.boardRequest$.hasValue()
+        ? store.boardRequest$.value().board
+        : undefined
     ),
-    width: computed(() =>
-      store.board$.hasValue() ? store.board$.value().board.width : 0
-    ),
-    height: computed(() =>
-      store.board$.hasValue() ? store.board$.value().board.height : 0
+    shipTypes: computed<Partial<Record<ShipType, Ship>>>(() =>
+      store.boardRequest$.hasValue()
+        ? store.boardRequest$.value().shipTypes
+        : {}
     ),
   })),
-  withMethods((store) => ({
-    setId: (id: string) => {
-      patchState(store, { id });
-    },
+  withComputed((store) => ({
+    cells: computed(() => store.board()?.cells ?? ([] as Cell[][])),
+    width: computed(() => store.board()?.width ?? 0),
+    height: computed(() => store.board()?.height ?? 0),
+    ships: computed(() => {
+      const ships = store.board()?.ships;
+      return Object.values(ShipType).reduce<Ship[]>((acc, shipType) => {
+        const shipCount = ships?.[shipType];
+        const ship = store.shipTypes()[shipType];
+        if (shipCount && ship) {
+          for (let i = 0; i < shipCount; i++) {
+            acc.push({ ...ship, id: `${shipType}-${i}` });
+          }
+        }
+        return acc;
+      }, []);
+    }),
   }))
 );
 
