@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RequestStatus } from '@osrs-battleship/shared';
@@ -12,14 +12,13 @@ import { BattleshipStore } from 'src/lib/shared/src/lib/store/battleship.store';
 @Component({
   selector: 'bs-main-menu',
   imports: [
-    CommonModule,
     NzLayoutModule,
     NzFormModule,
     NzTypographyModule,
     NzButtonModule,
     FormsModule,
-    NzAlertModule,
-  ],
+    NzAlertModule
+],
   templateUrl: './main-menu.html',
 })
 export class MainMenu {

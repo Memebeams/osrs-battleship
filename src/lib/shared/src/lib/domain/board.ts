@@ -1,8 +1,9 @@
 import { Cell } from './cell';
+import { ShipType } from './ship';
 
 export interface Board {
-  id: string;
   width: number;
   height: number;
   cells: Cell[][];
+  ships: { [key in ShipType]: number };
 }

@@ -7,6 +7,9 @@ export interface BoardResponse {
   // shipTypes: Record<string, ShipSquare[][]>;
   // ships: Record<string, Ship[]>;
   board: Board;
+  teamBoard: {
+    ships: any[];
+  };
 }
 
 export interface LoginResponse {
@@ -19,17 +22,17 @@ export interface LoginResponse {
 })
 export class BattleshipService {
   readonly http = inject(HttpClient);
-
   readonly config = inject(Config);
 
   login(password: string) {
-    console.log(this.config);
     return this.http.post<{ token: string }>(`${this.config.apiUrl}/login`, {
       password,
     });
   }
 
-  getBoard() {
-    return this.http.get<BoardResponse>(`${this.config.apiUrl}/board`);
+  getBoard(token: string) {
+    return this.http.get<BoardResponse>(`${this.config.apiUrl}/board`, {
+      headers: { Authorization: `${token}` },
+    });
   }
 }

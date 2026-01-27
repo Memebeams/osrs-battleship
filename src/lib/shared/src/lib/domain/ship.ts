@@ -2,6 +2,15 @@ export interface ShipSquare {
   included: boolean; // number of 90 degree clockwise rotations
 }
 
+export enum ShipType {
+  PLUS = 'plus',
+  LINE = 'line',
+  C = 'c',
+  T = 't',
+  P = 'p',
+  L = 'l',
+}
+
 export interface Ship {
   squares: ShipSquare[][];
   name: string;
