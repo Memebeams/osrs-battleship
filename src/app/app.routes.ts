@@ -1,4 +1,5 @@
 import { Route } from '@angular/router';
+import { authGuard } from '@osrs-battleship/shared';
 
 export const appRoutes: Route[] = [
   {
@@ -8,6 +9,7 @@ export const appRoutes: Route[] = [
   },
   {
     path: 'board',
+    canMatch: [authGuard],
     loadComponent: () =>
       import('@osrs-battleship/board').then((m) => m.BoardComponent),
   },

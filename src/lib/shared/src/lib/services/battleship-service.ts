@@ -30,9 +30,7 @@ export class BattleshipService {
     });
   }
 
-  getBoard(token: string) {
-    return this.http.get<BoardResponse>(`${this.config.apiUrl}/board`, {
-      headers: { Authorization: `${token}` },
-    });
+  getBoard() {
+    return this.http.get<BoardResponse>(`${this.config.apiUrl}/board`);
   }
 }

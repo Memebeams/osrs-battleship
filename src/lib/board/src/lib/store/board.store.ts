@@ -37,7 +37,7 @@ export const BoardStore = signalStore(
       params: () => {
         return store.bsStore.token() ?? undefined;
       },
-      stream: ({ params }) => store.service.getBoard(params),
+      stream: () => store.service.getBoard(),
     }),
   })),
   withComputed((store) => ({

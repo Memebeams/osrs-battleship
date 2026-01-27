@@ -11,5 +11,6 @@ export * from './lib/services/battleship-service';
 
 export * from './lib/store/battleship.store';
 
-export * from './lib/util/postman-interceptor';
 export * from './lib/util/token-interceptor';
+
+export * from './lib/auth-guard';

@@ -10,7 +10,6 @@ import {
   BattleshipStore,
   Config,
   environment,
-  postmanInterceptor,
   tokenInterceptor,
 } from '@osrs-battleship/shared';
 import { appRoutes } from './app.routes';
@@ -19,7 +18,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideAnimations(),
     provideBrowserGlobalErrorListeners(),
-    provideHttpClient(withInterceptors([postmanInterceptor, tokenInterceptor])),
+    provideHttpClient(withInterceptors([tokenInterceptor])),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(appRoutes, withComponentInputBinding()),
     { provide: Config, useValue: environment },
