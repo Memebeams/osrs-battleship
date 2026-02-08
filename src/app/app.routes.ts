@@ -1,5 +1,9 @@
 import { Route } from '@angular/router';
-import { authGuard } from '@osrs-battleship/shared';
+import {
+  authGuard,
+  redirectAdminsToAdminPage,
+  redirectNonAdminsToBoard,
+} from '@osrs-battleship/shared';
 
 export const appRoutes: Route[] = [
   {
@@ -9,8 +13,14 @@ export const appRoutes: Route[] = [
   },
   {
     path: 'board',
-    canMatch: [authGuard],
+    canMatch: [authGuard, redirectAdminsToAdminPage],
     loadComponent: () =>
-      import('@osrs-battleship/board').then((m) => m.BoardComponent),
+      import('@osrs-battleship/board').then((m) => m.BoardPageComponent),
+  },
+  {
+    path: 'admin',
+    canMatch: [authGuard, redirectNonAdminsToBoard],
+    loadComponent: () =>
+      import('@osrs-battleship/board').then((m) => m.AdminPageComponent),
   },
 ];

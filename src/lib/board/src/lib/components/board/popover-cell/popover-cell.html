@@ -1,0 +1,18 @@
+<div
+  class="relative"
+  nz-popover
+  [(nzPopoverVisible)]="isOpen"
+  nzPopoverTrigger="click"
+  [nzPopoverContent]="popover()"
+>
+  <bs-cell [cell]="cell()" />
+</div>
+<ng-template #adminPopover>
+  <bs-admin-popover [cell]="cell()" (closeClicked)="isOpen.set(false)" />
+</ng-template>
+<ng-template #captainPopover>
+  <bs-captain-popover />
+</ng-template>
+<ng-template #userPopover>
+  <bs-user-popover />
+</ng-template>

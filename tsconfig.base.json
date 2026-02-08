@@ -10,7 +10,8 @@
     "paths": {
       "@osrs-battleship/board": ["src/lib/board/src/index.ts"],
       "@osrs-battleship/game": ["src/lib/game/src/index.ts"],
-      "@osrs-battleship/shared": ["src/lib/shared/src/index.ts"]
+      "@osrs-battleship/shared": ["src/lib/shared/src/index.ts"],
+      "@osrs-battleship/admin": ["src/lib/admin/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

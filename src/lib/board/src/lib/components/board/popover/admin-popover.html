@@ -1,0 +1,26 @@
+<div>
+  <div class="flex flex-col gap-2 items-end">
+    <div class="flex flex-row gap-4 items-center">
+      <span>Description:</span>
+      <input class="w-[200px]" nz-input [(ngModel)]="description" />
+    </div>
+    <div class="flex flex-row gap-4 items-center">
+      <span>Rarity:</span>
+      <nz-select class="w-[200px]" [(ngModel)]="rarity">
+        @for (option of options; track option.value) {
+        <nz-option [nzValue]="option.value" [nzLabel]="option.label" />
+        }
+      </nz-select>
+    </div>
+    <div class="flex flex-row gap-4 items-center">
+      <span>Url:</span>
+      <input class="w-[200px]" nz-input [(ngModel)]="src" />
+    </div>
+    <div class="flex flex-row gap-2">
+      <button nz-button nzType="default" (click)="closeClicked.emit()">
+        Close
+      </button>
+      <button nz-button nzType="primary" (click)="save()">Save</button>
+    </div>
+  </div>
+</div>

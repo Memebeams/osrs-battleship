@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Board } from '../domain/board';
+import { Cell } from '../domain/cell';
 import { Ship, ShipType } from '../domain/ship';
 import { Config } from '../environments/config';
 
@@ -26,12 +27,20 @@ export class BattleshipService {
   readonly config = inject(Config);
 
   login(password: string) {
-    return this.http.post<{ token: string }>(`${this.config.apiUrl}/login`, {
+    return this.http.post<{
+      token: string;
+      isAdmin?: boolean;
+      isCaptain?: boolean;
+    }>(`${this.config.apiUrl}/login`, {
       password,
     });
   }
 
   getBoard() {
     return this.http.get<BoardResponse>(`${this.config.apiUrl}/board`);
+  }
+
+  updateCell(cell: Cell) {
+    return this.http.put<Cell>(`${this.config.apiUrl}/admin/cell`, cell);
   }
 }

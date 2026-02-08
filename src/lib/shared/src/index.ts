@@ -14,3 +14,5 @@ export * from './lib/store/battleship.store';
 export * from './lib/util/token-interceptor';
 
 export * from './lib/auth-guard';
+
+export * from './lib/guards/route-guards';

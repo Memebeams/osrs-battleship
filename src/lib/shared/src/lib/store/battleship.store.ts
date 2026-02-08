@@ -13,11 +13,15 @@ import { BattleshipService } from '../services/battleship-service';
 
 export interface BattleshipState {
   token: string | undefined;
+  isAdmin: boolean;
+  isCaptain: boolean;
   loginStatus: RequestStatus;
 }
 
 export const initialState: BattleshipState = {
   token: undefined,
+  isAdmin: false,
+  isCaptain: false,
   loginStatus: RequestStatus.INITIAL,
 };
 
@@ -34,9 +38,11 @@ export const BattleshipStore = signalStore(
         next: (response) => {
           patchState(store, {
             token: response.token,
+            isAdmin: response.isAdmin ?? false,
+            isCaptain: response.isCaptain ?? false,
             loginStatus: RequestStatus.SUCCESS,
           });
-          store.router.navigate(['/board']);
+          store.router.navigate(response.isAdmin ? ['/admin'] : ['/board']);
         },
         error: (error) => {
           patchState(store, { loginStatus: RequestStatus.ERROR });
@@ -44,5 +50,5 @@ export const BattleshipStore = signalStore(
         },
       });
     },
-  }))
+  })),
 );

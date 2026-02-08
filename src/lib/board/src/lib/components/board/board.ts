@@ -1,15 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject } from '@angular/core';
-import { BattleshipService, TeamShip } from '@osrs-battleship/shared';
+import { TeamShip } from '@osrs-battleship/shared';
 import { BoardStore } from '../../store/board.store';
-import { CellComponent } from '../cell/cell';
-import { ShipOverlay } from '../ship-overlay/ship-overlay';
-import { ShipPreview } from '../ship-preview/ship-preview';
+import { PopoverCell } from './popover-cell/popover-cell';
 
 @Component({
   selector: 'bs-board',
-  imports: [CommonModule, CellComponent, ShipOverlay, ShipPreview],
-  providers: [BoardStore, BattleshipService],
+  imports: [CommonModule, PopoverCell],
   templateUrl: './board.html',
 })
 export class BoardComponent {
@@ -18,7 +15,6 @@ export class BoardComponent {
   readonly store = inject(BoardStore);
 
   readonly viewModel = computed(() => ({
-    ships: this.store.ships(),
     width: this.store.width(),
     height: this.store.height(),
     cells: this.store.cells(),

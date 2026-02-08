@@ -1,17 +1,6 @@
 @let vm = viewModel();
-<div class="flex flex-col items-center mt-[4rem]">
-  <div class="mb-[4rem]">
-    <h1 class="eagle-lake-regular text-gray-100 text-8xl text-center">
-      Board Layout
-    </h1>
-  </div>
-  <div class="flex flex-row items-center gap-8 mb-[4rem]">
-    @for(ship of vm.ships; let i = $index; track $index) {
-    <bs-ship-preview [ship]="ship" />
-    }
-  </div>
-  <div class="grid mx-[16px] relative" [ngStyle]="boardStyles()">
-    <!-- <div class="absolute top-[40px] left-[40px] right-[40px] bottom-[40px] z-0">
+<div class="grid mx-[16px] relative" [ngStyle]="boardStyles()">
+  <!-- <div class="absolute top-[40px] left-[40px] right-[40px] bottom-[40px] z-0">
       @for(ship of vm.ships; let i = $index; track $index) {
       <bs-ship-overlay
         class="absolute"
@@ -20,39 +9,36 @@
       ></bs-ship-overlay>
       }
     </div> -->
-    <!-- Labels at top -->
-    <div></div>
-    @for (col of [].constructor(vm.width); let x = $index; track $index) {
-    <div class="text-white text-center my-auto">
-      {{ String.fromCharCode(65 + x) }}
-    </div>
-    }
-    <div></div>
-
-    <!-- Board rows -->
-    @for (row of vm.cells; let y = $index; track $index) {
-    <!-- Left label -->
-    <div class="text-white text-center my-auto">{{ y + 1 }}</div>
-
-    <!-- Cells -->
-    @for (cell of row; let x = $index; track $index) {
-    <div class="relative">
-      <bs-cell [cell]="cell" />
-    </div>
-    }
-
-    <!-- Right label -->
-    <div class="text-white text-center my-auto">{{ y + 1 }}</div>
-
-    }
-
-    <!-- Labels at bottom -->
-    <div></div>
-    @for (col of [].constructor(vm.width); let x = $index; track $index) {
-    <div class="text-white text-center my-auto">
-      {{ String.fromCharCode(65 + x) }}
-    </div>
-    }
-    <div></div>
+  <!-- Labels at top -->
+  <div></div>
+  @for (col of [].constructor(vm.width); let x = $index; track $index) {
+  <div class="text-white text-center my-auto">
+    {{ String.fromCharCode(65 + x) }}
   </div>
+  }
+  <div></div>
+
+  <!-- Board rows -->
+  @for (row of vm.cells; let y = $index; track $index) {
+  <!-- Left label -->
+  <div class="text-white text-center my-auto">{{ y + 1 }}</div>
+
+  <!-- Cells -->
+  @for (cell of row; let x = $index; track $index) {
+  <bs-popover-cell [cell]="cell" />
+  }
+
+  <!-- Right label -->
+  <div class="text-white text-center my-auto">{{ y + 1 }}</div>
+
+  }
+
+  <!-- Labels at bottom -->
+  <div></div>
+  @for (col of [].constructor(vm.width); let x = $index; track $index) {
+  <div class="text-white text-center my-auto">
+    {{ String.fromCharCode(65 + x) }}
+  </div>
+  }
+  <div></div>
 </div>
