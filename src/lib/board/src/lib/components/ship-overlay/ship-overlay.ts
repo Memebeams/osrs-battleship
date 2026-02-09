@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject, input } from '@angular/core';
-import { TeamShip } from '@osrs-battleship/shared';
+import { rotateSquares, TeamShip } from '@osrs-battleship/shared';
 import { BoardStore } from '../../store/board.store';
 
 @Component({
@@ -12,15 +12,27 @@ export class ShipOverlay {
   readonly store = inject(BoardStore);
   ship = input.required<TeamShip>();
 
+  readonly squares = computed(() =>
+    rotateSquares(this.ship().squares, this.ship().rotation),
+  );
+
+  readonly top = computed(() => {
+    const y = this.ship().coords?.y;
+    return y ? y - 1 : 0;
+  });
+
+  readonly left = computed(() => {
+    const y = this.ship().coords?.y;
+    return y ? y - 1 : 0;
+  });
+
   gridStyles = computed(() => ({
-    'grid-template-columns': `repeat(${this.ship().squares[0].length}, 1fr)`,
-    'grid-template-rows': `repeat(${this.ship().squares.length}, 1fr)`,
-    top: `calc(${this.ship().coords?.y ?? 1} * 100%`,
-    left: `calc(${this.ship().coords?.x ?? 1} * 100%`,
+    'grid-template-columns': `repeat(${this.squares()[0].length}, 1fr)`,
+    'grid-template-rows': `repeat(${this.squares().length}, 1fr)`,
   }));
 
   styles = computed(() => {
-    return this.ship().squares.map((row, rowIndex) =>
+    return this.squares().map((row, rowIndex) =>
       row.map((square, colIndex) => {
         if (!square.included) {
           return {};
@@ -30,28 +42,28 @@ export class ShipOverlay {
         const isEdgeOrNotIncluded = (r: number, c: number) =>
           r < 0 ||
           c < 0 ||
-          r >= this.ship().squares.length ||
+          r >= this.squares().length ||
           c >= row.length ||
-          !this.ship().squares[r][c].included;
+          !this.squares()[r][c].included;
 
         if (isEdgeOrNotIncluded(rowIndex - 1, colIndex)) {
-          borders['borderTop'] = '1px dashed lightgrey';
+          borders['borderTop'] = '2px dashed grey';
         }
         if (isEdgeOrNotIncluded(rowIndex + 1, colIndex)) {
-          borders['borderBottom'] = '1px dashed lightgrey';
+          borders['borderBottom'] = '2px dashed grey';
         }
         if (isEdgeOrNotIncluded(rowIndex, colIndex - 1)) {
-          borders['borderLeft'] = '1px dashed lightgrey';
+          borders['borderLeft'] = '2px dashed grey';
         }
         if (isEdgeOrNotIncluded(rowIndex, colIndex + 1)) {
-          borders['borderRight'] = '1px dashed lightgrey';
+          borders['borderRight'] = '2px dashed grey';
         }
 
         return {
           backgroundColor: 'rgba(211, 211, 211, 0.1)', // Transparent light grey
           ...borders,
         };
-      })
+      }),
     );
   });
 }

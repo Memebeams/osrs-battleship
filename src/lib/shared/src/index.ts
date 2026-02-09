@@ -2,6 +2,7 @@ export * from './lib/domain/board';
 export * from './lib/domain/cell';
 export * from './lib/domain/request-status';
 export * from './lib/domain/ship';
+export * from './lib/domain/team-board';
 
 export * from './lib/environments/config';
 export * from './lib/environments/environment';

@@ -1,0 +1,33 @@
+<div>
+  <div class="flex flex-col gap-2 items-end">
+    <div class="flex flex-row gap-4 items-center">
+      <div class="flex flex-row gap-4 items-center">
+        <span>Column:</span>
+        <nz-select class="w-[80px]" [(ngModel)]="x">
+          @for (option of xOptions(); track option.value) {
+          <nz-option [nzValue]="option.value" [nzLabel]="option.label" />
+          }
+        </nz-select>
+      </div>
+      <div class="flex flex-row gap-4 items-center">
+        <span>Row:</span>
+        <nz-select class="w-[80px]" [(ngModel)]="y">
+          @for (option of yOptions(); track option.value) {
+          <nz-option [nzValue]="option.value" [nzLabel]="option.label" />
+          }
+        </nz-select>
+      </div>
+    </div>
+    <div class="flex flex-row gap-2">
+      @if (store.updateInProgress()) {
+      <nz-icon nzType="loading" />
+      }
+      <button nz-button nzType="default">
+        <nz-icon nzType="sync" nzTheme="outline" (click)="rotate()" />
+      </button>
+      <button nz-button nzType="default" (click)="closeClicked.emit()">
+        Close
+      </button>
+    </div>
+  </div>
+</div>

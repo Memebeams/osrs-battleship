@@ -2,7 +2,7 @@
   class="relative"
   nz-popover
   [(nzPopoverVisible)]="isOpen"
-  nzPopoverTrigger="click"
+  [nzPopoverTrigger]="bsStore.isAdmin() ? 'click' : 'hover'"
   [nzPopoverContent]="popover()"
 >
   <bs-cell [cell]="cell()" />
@@ -10,9 +10,6 @@
 <ng-template #adminPopover>
   <bs-admin-popover [cell]="cell()" (closeClicked)="isOpen.set(false)" />
 </ng-template>
-<ng-template #captainPopover>
-  <bs-captain-popover />
-</ng-template>
 <ng-template #userPopover>
-  <bs-user-popover />
+  <bs-user-popover [cell]="cell()" />
 </ng-template>

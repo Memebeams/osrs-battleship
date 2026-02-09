@@ -1,5 +1,5 @@
 export interface ShipSquare {
-  included: boolean; // number of 90 degree clockwise rotations
+  included: boolean;
 }
 
 export enum ShipType {
@@ -12,17 +12,18 @@ export enum ShipType {
 }
 
 export interface Ship {
-  id?: string;
   squares: ShipSquare[][];
 }
 
 export interface TeamShip extends Ship {
+  id: string;
+  rotation: 0 | 1 | 2 | 3;
   coords?: { x: number; y: number };
 }
 
 export function rotateSquares(
   squares: ShipSquare[][],
-  rotation: 0 | 1 | 2 | 3
+  rotation: 0 | 1 | 2 | 3,
 ): ShipSquare[][] {
   // Rotate the 2D array squares by 90 * rotation degrees
   const numRows = squares.length;

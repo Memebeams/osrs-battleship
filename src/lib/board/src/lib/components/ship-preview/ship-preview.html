@@ -1,11 +1,21 @@
-<div class="grid" [ngStyle]="gridStyles()">
-  @for (row of ship().squares; let y = $index; track $index) { @for (square of
-  row; let x = $index; track $index) {
+<div
+  class="grid"
+  [ngStyle]="gridStyles()"
+  nz-popover
+  [(nzPopoverVisible)]="isOpen"
+  [nzPopoverTrigger]="bsStore.isCaptain() ? 'click' : undefined"
+  [nzPopoverContent]="popover"
+>
+  @for (row of squares(); let y = $index; track $index) { @for (square of row;
+  let x = $index; track $index) {
   <div
-    class="aspect-square flex justify-center items-center min-w-[24px] min-h-[24px]"
+    class="aspect-square flex justify-center items-center w-[24px] h-[24px]"
     [ngStyle]="styles()[y][x]"
   >
     {{ square.included ? '•' : '' }}
   </div>
   } }
 </div>
+<ng-template #popover>
+  <bs-captain-popover [ship]="ship()" (closeClicked)="isOpen.set(false)" />
+</ng-template>

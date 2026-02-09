@@ -2,15 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Board } from '../domain/board';
 import { Cell } from '../domain/cell';
-import { Ship, ShipType } from '../domain/ship';
+import { Ship, ShipType, TeamShip } from '../domain/ship';
 import { Config } from '../environments/config';
 
 export interface BoardResponse {
   shipTypes: { [key in ShipType]: Ship };
-  // ships: Record<string, Ship[]>;
   board: Board;
   teamBoard: {
-    ships: any[];
+    ships: Record<string, TeamShip>;
   };
 }
 
@@ -42,5 +41,9 @@ export class BattleshipService {
 
   updateCell(cell: Cell) {
     return this.http.put<Cell>(`${this.config.apiUrl}/admin/cell`, cell);
+  }
+
+  updateShip(ship: TeamShip) {
+    return this.http.put<TeamShip>(`${this.config.apiUrl}/ship`, ship);
   }
 }

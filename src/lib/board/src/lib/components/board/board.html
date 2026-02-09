@@ -1,14 +1,14 @@
 @let vm = viewModel();
 <div class="grid mx-[16px] relative" [ngStyle]="boardStyles()">
-  <!-- <div class="absolute top-[40px] left-[40px] right-[40px] bottom-[40px] z-0">
-      @for(ship of vm.ships; let i = $index; track $index) {
-      <bs-ship-overlay
-        class="absolute"
-        [ship]="ship"
-        [ngStyle]="getShipStyles(ship)"
-      ></bs-ship-overlay>
-      }
-    </div> -->
+  <div class="absolute top-[40px] left-[40px] right-[40px] bottom-[40px] z-0">
+    @for(ship of vm.ships; let i = $index; track $index) {
+    <bs-ship-overlay
+      class="absolute"
+      [ship]="ship"
+      [ngStyle]="getShipStyles(ship)"
+    />
+    }
+  </div>
   <!-- Labels at top -->
   <div></div>
   @for (col of [].constructor(vm.width); let x = $index; track $index) {

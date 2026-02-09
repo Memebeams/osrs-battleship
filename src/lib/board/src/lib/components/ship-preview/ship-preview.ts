@@ -1,22 +1,36 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, input } from '@angular/core';
-import { Ship } from '@osrs-battleship/shared';
+import { Component, computed, inject, input, signal } from '@angular/core';
+import {
+  BattleshipStore,
+  rotateSquares,
+  TeamShip,
+} from '@osrs-battleship/shared';
+import { NzPopoverModule } from 'ng-zorro-antd/popover';
+import { CaptainPopover } from './popover/captain-popover';
 
 @Component({
   selector: 'bs-ship-preview',
-  imports: [CommonModule],
+  imports: [CommonModule, NzPopoverModule, CaptainPopover],
   templateUrl: './ship-preview.html',
 })
 export class ShipPreview {
-  readonly ship = input.required<Ship>();
+  readonly ship = input.required<TeamShip>();
+
+  readonly bsStore = inject(BattleshipStore);
+
+  readonly isOpen = signal<boolean>(false);
+
+  readonly squares = computed(() =>
+    rotateSquares(this.ship().squares, this.ship().rotation),
+  );
 
   readonly gridStyles = computed(() => ({
-    'grid-template-columns': `repeat(${this.ship().squares[0].length}, 1fr)`,
-    'grid-template-rows': `repeat(${this.ship().squares.length}, 1fr)`,
+    'grid-template-columns': `repeat(${this.squares()[0].length}, 1fr)`,
+    'grid-template-rows': `repeat(${this.squares().length}, 1fr)`,
   }));
 
-  styles = computed(() => {
-    return this.ship().squares.map((row, rowIndex) =>
+  readonly styles = computed(() => {
+    return this.squares().map((row, rowIndex) =>
       row.map((square, colIndex) => {
         if (!square.included) {
           return {};
@@ -26,9 +40,9 @@ export class ShipPreview {
         const isEdgeOrNotIncluded = (r: number, c: number) =>
           r < 0 ||
           c < 0 ||
-          r >= this.ship().squares.length ||
+          r >= this.squares().length ||
           c >= row.length ||
-          !this.ship().squares[r][c].included;
+          !this.squares()[r][c].included;
 
         if (isEdgeOrNotIncluded(rowIndex - 1, colIndex)) {
           borders['borderTop'] = '2px dashed grey';
@@ -49,7 +63,7 @@ export class ShipPreview {
           cursor: 'default',
           ...borders,
         };
-      })
+      }),
     );
   });
 }

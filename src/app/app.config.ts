@@ -18,6 +18,13 @@ import {
 } from '@osrs-battleship/shared';
 import { appRoutes } from './app.routes';
 
+import { IconDefinition } from '@ant-design/icons-angular';
+import { provideNzIcons } from 'ng-zorro-antd/icon';
+
+import { LoadingOutline, SyncOutline } from '@ant-design/icons-angular/icons';
+
+const icons: IconDefinition[] = [SyncOutline, LoadingOutline];
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideAnimations(),
@@ -25,6 +32,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptors([tokenInterceptor])),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(appRoutes, withComponentInputBinding(), withHashLocation()),
+    provideNzIcons(icons),
     { provide: Config, useValue: environment },
     BattleshipStore,
   ],
