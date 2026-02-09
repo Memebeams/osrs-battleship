@@ -1,5 +1,6 @@
 export interface ShipSquare {
   included: boolean;
+  center?: boolean;
 }
 
 export enum ShipType {
@@ -59,4 +60,25 @@ export function rotateSquares(
   }
 
   return rotated;
+}
+
+export function getCenter(squares: ShipSquare[][]): {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+} {
+  for (let rowIndex = 0; rowIndex < squares.length; rowIndex++) {
+    for (let colIndex = 0; colIndex < squares[rowIndex].length; colIndex++) {
+      if (squares[rowIndex][colIndex].center) {
+        return {
+          x: colIndex,
+          y: rowIndex,
+          width: squares[0].length,
+          height: squares.length,
+        };
+      }
+    }
+  }
+  return { x: 0, y: 0, width: 0, height: 0 };
 }

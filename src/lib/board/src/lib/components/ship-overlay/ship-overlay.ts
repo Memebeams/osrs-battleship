@@ -16,16 +16,6 @@ export class ShipOverlay {
     rotateSquares(this.ship().squares, this.ship().rotation),
   );
 
-  readonly top = computed(() => {
-    const y = this.ship().coords?.y;
-    return y ? y - 1 : 0;
-  });
-
-  readonly left = computed(() => {
-    const y = this.ship().coords?.y;
-    return y ? y - 1 : 0;
-  });
-
   gridStyles = computed(() => ({
     'grid-template-columns': `repeat(${this.squares()[0].length}, 1fr)`,
     'grid-template-rows': `repeat(${this.squares().length}, 1fr)`,

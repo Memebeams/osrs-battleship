@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject } from '@angular/core';
-import { TeamShip } from '@osrs-battleship/shared';
+import { getCenter, rotateSquares, TeamShip } from '@osrs-battleship/shared';
 import { BoardStore } from '../../store/board.store';
 import { ShipOverlay } from '../ship-overlay/ship-overlay';
 import { PopoverCell } from './popover-cell/popover-cell';
@@ -30,9 +30,10 @@ export class BoardComponent {
   getShipStyles(ship: TeamShip) {
     const y = ship.coords?.y ?? 1;
     const x = ship.coords?.x ?? 1;
+    const centerOffset = getCenter(rotateSquares(ship.squares, ship.rotation));
     return {
-      top: `calc(100% * ${y - 1} / ${this.store.height()})`,
-      left: `calc(100% * ${x - 1} / ${this.store.width()})`,
+      top: `calc(100% * ${y - centerOffset.y} / ${this.store.height()})`,
+      left: `calc(100% * ${x - centerOffset.x} / ${this.store.width()})`,
     };
   }
 }
