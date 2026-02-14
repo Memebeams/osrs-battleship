@@ -1,0 +1,13 @@
+<div class="flex flex-col gap-4 items-end">
+  <strong class="w-full text-center">{{ cell().description }}</strong>
+  <div class="flex row gap-4 items-center">
+    <span>Team Member RSN:</span>
+    <input class="w-[200px]" nz-input [(ngModel)]="rsn" />
+  </div>
+  <div class="flex row gap-4 items-center">
+    <button nz-button nzType="default" (click)="closeClicked.emit()">
+      Close
+    </button>
+    <button nz-button nzType="primary" (click)="claim()">Claim</button>
+  </div>
+</div>

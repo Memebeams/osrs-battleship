@@ -15,12 +15,14 @@ import {
   BattleshipService,
   Board,
   Cell,
+  getCellKey,
   Ship,
   ShipType,
   TeamBoard,
   TeamShip,
 } from '@osrs-battleship/shared';
 import { pipe, switchMap, tap } from 'rxjs';
+import { Attack } from 'src/lib/shared/src/lib/domain/attack';
 
 export interface BoardState {
   board: Board | undefined;
@@ -146,6 +148,29 @@ export const BoardStore = signalStore(
           },
           error: (err) => {
             console.error('Error updating ship:', err);
+          },
+        }),
+      ),
+    ),
+    attack: rxMethod<Attack>(
+      pipe(
+        tap(() => patchState(store, { updateInProgress: true })),
+        switchMap((attack) => store.service.attack(attack)),
+        tapResponse({
+          next: (updatedAttack: Attack) => {
+            const teamBoard = store.teamBoard();
+            if (teamBoard) {
+              if (!teamBoard.attacksByTeam) {
+                teamBoard.attacksByTeam = {};
+              }
+              teamBoard.attacksByTeam[getCellKey(updatedAttack)] =
+                updatedAttack;
+            }
+            patchState(store, { teamBoard, updateInProgress: false });
+          },
+          error: (err) => {
+            patchState(store, { updateInProgress: false });
+            console.error('Error performing attack:', err);
           },
         }),
       ),

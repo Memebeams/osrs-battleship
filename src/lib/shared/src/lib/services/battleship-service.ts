@@ -1,16 +1,18 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
+import { Attack } from '../domain/attack';
 import { Board } from '../domain/board';
 import { Cell } from '../domain/cell';
 import { Ship, ShipType, TeamShip } from '../domain/ship';
+import { TeamBoard } from '../domain/team-board';
 import { Config } from '../environments/config';
 
 export interface BoardResponse {
   shipTypes: { [key in ShipType]: Ship };
   board: Board;
-  teamBoard: {
-    ships: Record<string, TeamShip>;
-  };
+  teamBoard: TeamBoard;
+  hitSrc: string;
+  missSrc: string;
 }
 
 export interface LoginResponse {
@@ -45,5 +47,9 @@ export class BattleshipService {
 
   updateShip(ship: TeamShip) {
     return this.http.put<TeamShip>(`${this.config.apiUrl}/ship`, ship);
+  }
+
+  attack(attack: Attack) {
+    return this.http.post<Attack>(`${this.config.apiUrl}/attack`, attack);
   }
 }

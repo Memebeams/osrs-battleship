@@ -1,6 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject } from '@angular/core';
-import { getCenter, rotateSquares, TeamShip } from '@osrs-battleship/shared';
+import { Component, computed, inject, input } from '@angular/core';
+import {
+  Cell,
+  getCellKey,
+  getCenter,
+  rotateSquares,
+  TeamShip,
+} from '@osrs-battleship/shared';
 import { BoardStore } from '../../store/board.store';
 import { ShipOverlay } from '../ship-overlay/ship-overlay';
 import { PopoverCell } from './popover-cell/popover-cell';
@@ -15,12 +21,27 @@ export class BoardComponent {
 
   readonly store = inject(BoardStore);
 
+  readonly enemy = input<boolean>(false);
+
   readonly viewModel = computed(() => ({
     width: this.store.width(),
     height: this.store.height(),
-    cells: this.store.cells(),
+    cells: this.cellsWithState(),
     ships: this.store.teamShips(),
   }));
+
+  readonly cellsWithState = computed(() => {
+    const attacks = this.enemy()
+      ? (this.store.teamBoard()?.attacksByTeam ?? {})
+      : (this.store.teamBoard()?.attacksOnTeam ?? {});
+
+    return this.store.cells().map((row) =>
+      row.map((cell): Cell => {
+        const attack = attacks[getCellKey(cell)];
+        return attack ? { ...cell, state: attack.hit ? 'hit' : 'miss' } : cell;
+      }),
+    );
+  });
 
   boardStyles = computed(() => ({
     'grid-template-columns': `40px repeat(${this.store.width()}, 1fr) 40px`,
