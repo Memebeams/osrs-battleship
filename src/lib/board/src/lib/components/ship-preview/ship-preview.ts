@@ -4,6 +4,8 @@ import {
   BattleshipStore,
   getCellKey,
   rotateSquares,
+  ShipBackgroundColors,
+  ShipColors,
   TeamShip,
 } from '@osrs-battleship/shared';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
@@ -48,9 +50,9 @@ export class ShipPreview {
         const key = getCellKey({ x: colIndex, y: rowIndex });
         const attack = this.ship().hits?.[key];
         const backgroundColor = attack
-          ? 'rgba(255, 0, 0, 0.5)'
-          : 'rgba(211, 211, 211, 0.1)';
-        const color = attack ? 'rgba(200, 0, 0, 1.0)' : 'grey';
+          ? ShipBackgroundColors['hit']
+          : ShipBackgroundColors['default'];
+        const color = attack ? ShipColors['hit'] : ShipColors['default'];
 
         if (isEdgeOrNotIncluded(rowIndex - 1, colIndex)) {
           borders['borderTop'] = `2px dashed ${color}`;

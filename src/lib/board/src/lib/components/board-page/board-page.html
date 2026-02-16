@@ -11,7 +11,12 @@
       class="w-[752px] flex flex-row flex-wrap justify-center items-center gap-[16px]"
     >
       @if (!enemy()) { @for(ship of this.store.teamShips(); let i = $index;
-      track $index) {
+      track ship.id) {
+      <div class="w-[80px] h-[80px] flex justify-center items-center">
+        <bs-ship-preview [ship]="ship" />
+      </div>
+      } } @else { @for(ship of (this.store.enemyShipsSunk()); let i = $index;
+      track ship.id) {
       <div class="w-[80px] h-[80px] flex justify-center items-center">
         <bs-ship-preview [ship]="ship" />
       </div>

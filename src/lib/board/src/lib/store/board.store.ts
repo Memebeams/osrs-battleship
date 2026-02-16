@@ -16,8 +16,6 @@ import {
   Board,
   Cell,
   getCellKey,
-  getCenter,
-  rotateSquares,
   Ship,
   ShipType,
   TeamBoard,
@@ -90,36 +88,13 @@ export const BoardStore = signalStore(
         .map(
           (ship) =>
             store.teamBoard()?.ships[ship.id ?? ''] ?? (ship as TeamShip),
-        )
-        .map((ship) => {
-          const teamBoard = store.teamBoard();
-          if (!ship.coords) {
-            return ship;
-          }
-
-          const shipWithHits: TeamShip = { ...ship, hits: {} };
-          const squares = rotateSquares(ship.squares, ship.rotation);
-
-          for (const [rowIndex, row] of squares.entries()) {
-            for (const [colIndex, square] of row.entries()) {
-              if (!square.included) continue;
-              const center = getCenter(squares);
-              const cellCoords = {
-                x: ship.coords.x - center.x + colIndex,
-                y: ship.coords.y - center.y + rowIndex,
-              };
-              const attack = teamBoard?.attacksOnTeam?.[getCellKey(cellCoords)];
-              if (attack) {
-                shipWithHits.hits = {
-                  ...shipWithHits.hits,
-                  [getCellKey({ x: colIndex, y: rowIndex })]: attack,
-                };
-              }
-            }
-          }
-          return shipWithHits;
-        }),
+        ),
     ),
+    enemyShipsSunk: computed(() => {
+      const teamBoard = store.teamBoard();
+      if (!teamBoard) return [];
+      return Object.values(teamBoard.enemyShipsSunk ?? {});
+    }),
   })),
   withMethods((store) => ({
     setBoard: rxMethod<Board | undefined>(
@@ -187,14 +162,19 @@ export const BoardStore = signalStore(
         tap(() => patchState(store, { updateInProgress: true })),
         switchMap((attack) => store.service.attack(attack)),
         tapResponse({
-          next: (updatedAttack: Attack) => {
+          next: (response: {
+            attack: Attack;
+            enemyShipsSunk: Record<string, TeamShip>;
+          }) => {
             const oldBoard = store.teamBoard();
             if (oldBoard) {
               const teamBoard = { ...oldBoard };
               teamBoard.attacksByTeam = {
                 ...(teamBoard.attacksByTeam || {}),
-                [getCellKey(updatedAttack)]: updatedAttack,
+                [getCellKey(response.attack)]: response.attack,
               };
+              teamBoard.enemyShipsSunk = response.enemyShipsSunk;
+              console.log(teamBoard.enemyShipsSunk);
               patchState(store, { teamBoard, updateInProgress: false });
             }
           },

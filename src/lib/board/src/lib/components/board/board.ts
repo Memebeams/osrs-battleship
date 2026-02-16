@@ -27,7 +27,7 @@ export class BoardComponent {
     width: this.store.width(),
     height: this.store.height(),
     cells: this.cellsWithState(),
-    ships: this.store.teamShips(),
+    ships: this.enemy() ? this.store.enemyShipsSunk() : this.store.teamShips(),
   }));
 
   readonly cellsWithState = computed(() => {

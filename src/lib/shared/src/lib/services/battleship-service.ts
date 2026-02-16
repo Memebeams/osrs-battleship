@@ -50,7 +50,10 @@ export class BattleshipService {
   }
 
   attack(attack: Attack) {
-    return this.http.post<Attack>(`${this.config.apiUrl}/attack`, attack);
+    return this.http.post<{
+      attack: Attack;
+      enemyShipsSunk: Record<string, TeamShip>;
+    }>(`${this.config.apiUrl}/attack`, attack);
   }
 
   shuffle() {
