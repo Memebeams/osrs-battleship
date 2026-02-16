@@ -1,17 +1,23 @@
-<div class="flex flex-col items-center mt-[4rem]">
-  <div class="mb-[4rem]">
-    <h1 class="eagle-lake-regular text-gray-100 text-8xl text-center">
-      Board Layout
-    </h1>
-  </div>
-  <div
-    class="w-[752px] flex flex-row flex-wrap justify-center items-center gap-[16px] mb-[4rem]"
-  >
-    @for(ship of this.store.teamShips(); let i = $index; track $index) {
-    <div class="w-[80px] h-[80px] flex justify-center items-center">
-      <bs-ship-preview [ship]="ship" />
+<div class="board-background flex justify-center">
+  <div class="w-[32px] right-fade"></div>
+  <div class="flex flex-col items-center gap-[4rem] bg-slate-950/85 py-8">
+    <div>
+      <nz-radio-group class="flex gap-4" [(ngModel)]="enemy">
+        <label nz-radio-button [nzValue]="false">Your Team</label>
+        <label nz-radio-button [nzValue]="true">Enemy Team</label>
+      </nz-radio-group>
     </div>
-    }
+    <div
+      class="w-[752px] flex flex-row flex-wrap justify-center items-center gap-[16px]"
+    >
+      @if (!enemy()) { @for(ship of this.store.teamShips(); let i = $index;
+      track $index) {
+      <div class="w-[80px] h-[80px] flex justify-center items-center">
+        <bs-ship-preview [ship]="ship" />
+      </div>
+      } }
+    </div>
+    <bs-board [enemy]="enemy()" />
   </div>
-  <bs-board />
+  <div class="w-[32px] left-fade"></div>
 </div>

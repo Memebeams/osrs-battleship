@@ -4,7 +4,8 @@ export interface Cell {
   src: string;
   rarity: CellRarity;
   description: string;
-  occupyingShipId?: string;
+  state?: 'hit' | 'miss';
+  attacker?: string;
 }
 
 export enum CellRarity {
@@ -30,3 +31,17 @@ export const CellBackgroundColors: Record<CellRarity, string> = {
   [CellRarity.Epic]: '#16001A', // Epic (slightly darker purple, less gray)
   [CellRarity.Legendary]: '#1A1400', // Legendary (darker orange)
 };
+
+export const ClaimedCellColors: Record<'hit' | 'miss', string> = {
+  hit: '#be0000ff', // Red for hit
+  miss: '#ffffffff', // Gray for miss
+};
+
+export const ClaimedCellBackgroundColors: Record<'hit' | 'miss', string> = {
+  hit: '#631010ff', // Dark red for hit
+  miss: '#a7a7a7ff', // Dark gray for miss
+};
+
+export function getCellKey({ x, y }: { x: number; y: number }) {
+  return `${x},${y}`;
+}

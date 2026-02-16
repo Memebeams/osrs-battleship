@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, computed, inject, input, signal } from '@angular/core';
 import {
   BattleshipStore,
+  getCellKey,
   rotateSquares,
   TeamShip,
 } from '@osrs-battleship/shared';
@@ -44,22 +45,29 @@ export class ShipPreview {
           c >= row.length ||
           !this.squares()[r][c].included;
 
+        const key = getCellKey({ x: colIndex, y: rowIndex });
+        const attack = this.ship().hits?.[key];
+        const backgroundColor = attack
+          ? 'rgba(255, 0, 0, 0.5)'
+          : 'rgba(211, 211, 211, 0.1)';
+        const color = attack ? 'rgba(200, 0, 0, 1.0)' : 'grey';
+
         if (isEdgeOrNotIncluded(rowIndex - 1, colIndex)) {
-          borders['borderTop'] = '2px dashed grey';
+          borders['borderTop'] = `2px dashed ${color}`;
         }
         if (isEdgeOrNotIncluded(rowIndex + 1, colIndex)) {
-          borders['borderBottom'] = '2px dashed grey';
+          borders['borderBottom'] = `2px dashed ${color}`;
         }
         if (isEdgeOrNotIncluded(rowIndex, colIndex - 1)) {
-          borders['borderLeft'] = '2px dashed grey';
+          borders['borderLeft'] = `2px dashed ${color}`;
         }
         if (isEdgeOrNotIncluded(rowIndex, colIndex + 1)) {
-          borders['borderRight'] = '2px dashed grey';
+          borders['borderRight'] = `2px dashed ${color}`;
         }
 
         return {
-          backgroundColor: 'rgba(211, 211, 211, 0.1)', // Transparent light grey
-          color: 'grey',
+          backgroundColor,
+          color,
           cursor: 'default',
           ...borders,
         };

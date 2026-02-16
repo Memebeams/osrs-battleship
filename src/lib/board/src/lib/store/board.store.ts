@@ -15,12 +15,16 @@ import {
   BattleshipService,
   Board,
   Cell,
+  getCellKey,
+  getCenter,
+  rotateSquares,
   Ship,
   ShipType,
   TeamBoard,
   TeamShip,
 } from '@osrs-battleship/shared';
 import { pipe, switchMap, tap } from 'rxjs';
+import { Attack } from 'src/lib/shared/src/lib/domain/attack';
 
 export interface BoardState {
   board: Board | undefined;
@@ -86,7 +90,35 @@ export const BoardStore = signalStore(
         .map(
           (ship) =>
             store.teamBoard()?.ships[ship.id ?? ''] ?? (ship as TeamShip),
-        ),
+        )
+        .map((ship) => {
+          const teamBoard = store.teamBoard();
+          if (!ship.coords) {
+            return ship;
+          }
+
+          const shipWithHits: TeamShip = { ...ship, hits: {} };
+          const squares = rotateSquares(ship.squares, ship.rotation);
+
+          for (const [rowIndex, row] of squares.entries()) {
+            for (const [colIndex, square] of row.entries()) {
+              if (!square.included) continue;
+              const center = getCenter(squares);
+              const cellCoords = {
+                x: ship.coords.x - center.x + colIndex,
+                y: ship.coords.y - center.y + rowIndex,
+              };
+              const attack = teamBoard?.attacksOnTeam?.[getCellKey(cellCoords)];
+              if (attack) {
+                shipWithHits.hits = {
+                  ...shipWithHits.hits,
+                  [getCellKey({ x: colIndex, y: rowIndex })]: attack,
+                };
+              }
+            }
+          }
+          return shipWithHits;
+        }),
     ),
   })),
   withMethods((store) => ({
@@ -146,6 +178,29 @@ export const BoardStore = signalStore(
           },
           error: (err) => {
             console.error('Error updating ship:', err);
+          },
+        }),
+      ),
+    ),
+    attack: rxMethod<Attack>(
+      pipe(
+        tap(() => patchState(store, { updateInProgress: true })),
+        switchMap((attack) => store.service.attack(attack)),
+        tapResponse({
+          next: (updatedAttack: Attack) => {
+            const oldBoard = store.teamBoard();
+            if (oldBoard) {
+              const teamBoard = { ...oldBoard };
+              teamBoard.attacksByTeam = {
+                ...(teamBoard.attacksByTeam || {}),
+                [getCellKey(updatedAttack)]: updatedAttack,
+              };
+              patchState(store, { teamBoard, updateInProgress: false });
+            }
+          },
+          error: (err) => {
+            patchState(store, { updateInProgress: false });
+            console.error('Error performing attack:', err);
           },
         }),
       ),

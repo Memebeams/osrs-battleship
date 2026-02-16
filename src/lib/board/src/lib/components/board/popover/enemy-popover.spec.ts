@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { CellComponent } from './cell';
+import { EnemyPopover } from './enemy-popover';
 
-describe('Cell', () => {
-  let component: CellComponent;
-  let fixture: ComponentFixture<CellComponent>;
+describe('EnemyPopover', () => {
+  let component: EnemyPopover;
+  let fixture: ComponentFixture<EnemyPopover>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CellComponent],
+      imports: [EnemyPopover],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(CellComponent);
+    fixture = TestBed.createComponent(EnemyPopover);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    await fixture.whenStable();
   });
 
   it('should create', () => {

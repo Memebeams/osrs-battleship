@@ -1,3 +1,5 @@
+import { Attack } from './attack';
+
 export interface ShipSquare {
   included: boolean;
   center?: boolean;
@@ -20,6 +22,7 @@ export interface TeamShip extends Ship {
   id: string;
   rotation: 0 | 1 | 2 | 3;
   coords?: { x: number; y: number };
+  hits?: Record<string, Attack>;
 }
 
 export function rotateSquares(
