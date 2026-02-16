@@ -17,15 +17,32 @@ export class ShipOverlay {
   readonly store = inject(BoardStore);
   ship = input.required<TeamShip>();
 
+  enemy = input(false);
+
   readonly squares = computed(() =>
     rotateSquares(this.ship().squares, this.ship().rotation),
   );
 
   readonly sunk = computed(() => {
-    const key = this.ship().id;
-    const teamBoard = this.store.teamBoard();
-    if (!teamBoard) return false;
-    return teamBoard.enemyShipsSunk?.[key] !== undefined;
+    const ship = this.ship();
+    const key = ship.id;
+
+    if (ship.hits && ship.coords) {
+      const totalHits = Object.keys(ship.hits).length;
+      const totalSquares = ship.squares.reduce(
+        (sum, row) => sum + row.filter((sq) => sq.included).length,
+        0,
+      );
+      return totalHits >= totalSquares;
+    }
+
+    if (this.enemy()) {
+      const teamBoard = this.store.teamBoard();
+      if (!teamBoard) return false;
+      return teamBoard.enemyShipsSunk?.[key] !== undefined;
+    }
+
+    return false;
   });
 
   gridStyles = computed(() => ({
