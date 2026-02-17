@@ -4,6 +4,10 @@
     class="border border-gray-600 bg-gray-800 hover:bg-gray-700 aspect-square text-gray-200 flex justify-center items-center min-w-[40px] min-h-[40px] w-[40px] h-[40px]"
     [ngStyle]="vm.styles"
   >
-    <img class="p-[12.5%]" [src]="vm.src" [alt]="vm.description" />
+    <img
+      class="p-[12.5%] max-w-full max-h-full"
+      [src]="vm.src"
+      [alt]="vm.description"
+    />
   </div>
 </div>
