@@ -57,6 +57,9 @@ export class BattleshipService {
   }
 
   shuffle() {
-    return this.http.post(`${this.config.apiUrl}/admin/shuffle`, {});
+    return this.http.post<{ board: Board }>(
+      `${this.config.apiUrl}/admin/shuffle`,
+      {},
+    );
   }
 }

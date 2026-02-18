@@ -14,6 +14,7 @@ import { BoardComponent } from '../../board/board';
   templateUrl: './admin-page.html',
 })
 export class AdminPageComponent {
+  readonly store = inject(BoardStore);
   readonly service = inject(BattleshipService);
 
   loading = signal<boolean>(false);
@@ -26,7 +27,8 @@ export class AdminPageComponent {
       switchMap(() =>
         this.service.shuffle().pipe(
           tapResponse({
-            next: () => {
+            next: ({ board }) => {
+              this.store.setBoard(board);
               this.loading.set(false);
             },
             error: () => {

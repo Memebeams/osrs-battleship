@@ -1,6 +1,12 @@
 <div class="board-background flex justify-center">
   <div class="w-[32px] right-fade"></div>
   <div class="flex flex-col items-center gap-[4rem] bg-slate-950/85 py-8">
+    <h2 class="eagle-lake-regular text-gray-100 text-6xl text-center">
+      Real Irons
+    </h2>
+    <h1 class="eagle-lake-regular text-gray-100 text-7xl text-center">
+      Battleship Bingo
+    </h1>
     <div>
       <nz-radio-group class="flex gap-4" [(ngModel)]="enemy">
         <label nz-radio-button [nzValue]="false">Your Team</label>
@@ -10,13 +16,13 @@
     <div
       class="w-[752px] flex flex-row flex-wrap justify-center items-center gap-[16px]"
     >
-      @if (!enemy()) { @for(ship of this.store.teamShips(); let i = $index;
-      track ship.id) {
+      @if (!enemy()) { @for(ship of allyShipsToShow(); let i = $index; track
+      ship.id) {
       <div class="w-[80px] h-[80px] flex justify-center items-center">
         <bs-ship-preview [ship]="ship" />
       </div>
-      } } @else { @for(ship of (this.store.enemyShipsSunk()); let i = $index;
-      track ship.id) {
+      } } @else { @for(ship of (store.enemyShipsSunk()); let i = $index; track
+      ship.id) {
       <div class="w-[80px] h-[80px] flex justify-center items-center">
         <bs-ship-preview [ship]="ship" />
       </div>

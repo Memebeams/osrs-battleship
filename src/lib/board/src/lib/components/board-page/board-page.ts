@@ -1,5 +1,6 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { BattleshipStore } from '@osrs-battleship/shared';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { BoardStore } from '../../store/board.store';
@@ -45,6 +46,14 @@ import { ShipPreview } from '../ship-preview/ship-preview';
 })
 export class BoardPageComponent {
   readonly store = inject(BoardStore);
+  readonly bsStore = inject(BattleshipStore);
+
+  readonly allyShipsToShow = computed(() => {
+    const isCaptain = this.bsStore.isCaptain();
+    return this.store
+      .teamShips()
+      .filter((ship) => (isCaptain ? ship : !!ship.coords));
+  });
 
   readonly enemy = signal<boolean>(false);
 }
