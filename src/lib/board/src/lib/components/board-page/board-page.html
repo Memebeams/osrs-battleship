@@ -7,8 +7,8 @@
   </h1>
   <div>
     <nz-radio-group class="flex gap-4" [(ngModel)]="enemy">
-      <label nz-radio-button [nzValue]="false">Your Team</label>
-      <label nz-radio-button [nzValue]="true">Enemy Team</label>
+      <label nz-radio-button [nzValue]="false">Your Ships</label>
+      <label nz-radio-button [nzValue]="true">Enemy Ships</label>
     </nz-radio-group>
   </div>
   @if (allyShipsToShow().length > 0 || (enemy() && store.enemyShipsSunk().length
