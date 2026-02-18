@@ -11,7 +11,8 @@
       <label nz-radio-button [nzValue]="true">Enemy Team</label>
     </nz-radio-group>
   </div>
-  @if (allyShipsToShow().length > 0 && store.enemyShipsSunk().length > 0) {
+  @if (allyShipsToShow().length > 0 || (enemy() && store.enemyShipsSunk().length
+  > 0)) {
   <div
     class="w-[752px] min-h-[180px] flex flex-row flex-wrap justify-center items-center gap-[16px]"
   >
