@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BattleshipStore } from '@osrs-battleship/shared';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -30,11 +30,6 @@ export class BoardPageComponent {
     return this.store
       .teamShips()
       .filter((ship) => (isCaptain ? ship : !!ship.coords));
-  });
-
-  readonly asdf = effect(() => {
-    console.log('---');
-    console.log(this.allyShipsToShow());
   });
 
   readonly enemy = signal<boolean>(false);

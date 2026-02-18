@@ -4,7 +4,7 @@
       Board Setup
     </h1>
   </div>
-  <div class="flex flex-row justify-center">
+  <div class="flex flex-row justify-center gap-4">
     <button
       nz-button
       nzType="default"
@@ -13,6 +13,44 @@
     >
       Shuffle
     </button>
+    <div
+      class="relative"
+      nz-popover
+      [(nzPopoverVisible)]="confirmVisible"
+      [nzPopoverTrigger]="undefined"
+      [nzPopoverContent]="popover"
+    >
+      <button
+        nz-button
+        nzType="default"
+        [nzLoading]="loading()"
+        (click)="resetClicked()"
+        [disabled]="resetComplete()"
+      >
+        {{ resetComplete() ? 'Reset Complete' : 'Reset Board' }}
+      </button>
+    </div>
   </div>
+  <ng-template #popover>
+    <div class="flex flex-col items-center gap-4">
+      <p class="text-gray-100 text-lg">
+        Are you sure you want to reset? This will clear all ships and attacks on
+        tiles.
+      </p>
+      <div class="flex flex-row justify-center gap-4">
+        <button nz-button nzType="default" (click)="confirmVisible.set(false)">
+          No
+        </button>
+        <button
+          nz-button
+          nzType="default"
+          [nzLoading]="loading()"
+          (click)="reset()"
+        >
+          Yes
+        </button>
+      </div>
+    </div>
+  </ng-template>
   <bs-board />
 </bs-container>

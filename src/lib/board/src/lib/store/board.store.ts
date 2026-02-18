@@ -178,7 +178,6 @@ export const BoardStore = signalStore(
                 [getCellKey(response.attack)]: response.attack,
               };
               teamBoard.enemyShipsSunk = response.enemyShipsSunk;
-              console.log(teamBoard.enemyShipsSunk);
               patchState(store, { teamBoard, updateInProgress: false });
             }
           },

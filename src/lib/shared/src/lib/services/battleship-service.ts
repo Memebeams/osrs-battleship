@@ -63,4 +63,12 @@ export class BattleshipService {
       {},
     );
   }
+
+  reset() {
+    return this.http.post(
+      `${this.config.apiUrl}/admin/reset`,
+      {},
+      { responseType: 'text' },
+    );
+  }
 }
