@@ -135,26 +135,30 @@ export const BoardStore = signalStore(
     updateShip: rxMethod<TeamShip>(
       pipe(
         tap(() => patchState(store, { updateInProgress: true })),
-        switchMap((ship) => store.service.updateShip(ship)),
-        tapResponse({
-          next: (updatedShip: TeamShip) => {
-            patchState(store, (state) => {
-              if (!state.teamBoard) return { updateInProgress: false };
-              if (!updatedShip.id) return { updateInProgress: false };
-              const teamBoard = {
-                ...state.teamBoard,
-                ships: {
-                  ...state.teamBoard.ships,
-                  [updatedShip.id]: updatedShip,
-                },
-              };
-              return { teamBoard, updateInProgress: false };
-            });
-          },
-          error: (err) => {
-            console.error('Error updating ship:', err);
-          },
-        }),
+        switchMap((ship) =>
+          store.service.updateShip(ship).pipe(
+            tapResponse({
+              next: (updatedShip: TeamShip) => {
+                patchState(store, (state) => {
+                  if (!state.teamBoard) return { updateInProgress: false };
+                  if (!updatedShip.id) return { updateInProgress: false };
+                  const teamBoard = {
+                    ...state.teamBoard,
+                    ships: {
+                      ...state.teamBoard.ships,
+                      [updatedShip.id]: updatedShip,
+                    },
+                  };
+                  return { teamBoard, updateInProgress: false };
+                });
+              },
+              error: (err) => {
+                patchState(store, { updateInProgress: false });
+                console.error('Error updating ship:', err);
+              },
+            }),
+          ),
+        ),
       ),
     ),
     attack: rxMethod<Attack>(

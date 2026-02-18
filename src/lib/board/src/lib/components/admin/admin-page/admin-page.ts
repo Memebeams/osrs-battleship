@@ -6,10 +6,11 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { pipe, switchMap, tap } from 'rxjs';
 import { BoardStore } from '../../../store/board.store';
 import { BoardComponent } from '../../board/board';
+import { Container } from '../../container/container';
 
 @Component({
   selector: 'bs-admin-page',
-  imports: [BoardComponent, NzButtonModule],
+  imports: [BoardComponent, NzButtonModule, Container],
   providers: [BoardStore],
   templateUrl: './admin-page.html',
 })

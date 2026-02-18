@@ -23,4 +23,9 @@ export const appRoutes: Route[] = [
     loadComponent: () =>
       import('@osrs-battleship/board').then((m) => m.AdminPageComponent),
   },
+  {
+    path: 'preview',
+    loadComponent: () =>
+      import('@osrs-battleship/board').then((m) => m.PreviewPageComponent),
+  },
 ];
