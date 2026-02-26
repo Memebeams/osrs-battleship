@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Attack } from '../domain/attack';
+import { AdminAttack, Attack } from '../domain/attack';
 import { Board } from '../domain/board';
 import { Cell } from '../domain/cell';
 import { Ship, ShipType, TeamShip } from '../domain/ship';
@@ -14,6 +14,7 @@ export interface BoardResponse {
   teamBoard: TeamBoard;
   hitSrc: string;
   missSrc: string;
+  teamBoards?: Record<string, TeamBoard>;
 }
 
 export interface LoginResponse {
@@ -55,6 +56,19 @@ export class BattleshipService {
       attack: Attack;
       enemyShipsSunk: Record<string, TeamShip>;
     }>(`${this.config.apiUrl}/attack`, attack);
+  }
+
+  adminAttack(attack: AdminAttack) {
+    return this.http.post<{
+      attack: AdminAttack;
+      enemyShipsSunk: Record<string, TeamShip>;
+    }>(`${this.config.apiUrl}/admin/attack`, attack);
+  }
+
+  clearAttack(body: { x: number; y: number; teamId: string }) {
+    return this.http.delete<void>(`${this.config.apiUrl}/admin/attack`, {
+      body,
+    });
   }
 
   shuffle() {

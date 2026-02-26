@@ -21,18 +21,20 @@ import {
   TeamBoard,
   TeamShip,
 } from '@osrs-battleship/shared';
-import { pipe, switchMap, tap } from 'rxjs';
-import { Attack } from 'src/lib/shared/src/lib/domain/attack';
+import { map, pipe, switchMap, tap } from 'rxjs';
+import { AdminAttack, Attack } from 'src/lib/shared/src/lib/domain/attack';
 
 export interface BoardState {
   board: Board | undefined;
   teamBoard: TeamBoard | undefined;
+  teamBoards: Record<string, TeamBoard> | undefined;
   updateInProgress: boolean;
 }
 
 export const initialState: BoardState = {
   board: undefined,
   teamBoard: undefined,
+  teamBoards: undefined,
   updateInProgress: false,
 };
 
@@ -55,6 +57,11 @@ export const BoardStore = signalStore(
     teamBoard$: computed(() =>
       store.boardRequest$.hasValue()
         ? store.boardRequest$.value().teamBoard
+        : undefined,
+    ),
+    teamBoards$: computed(() =>
+      store.boardRequest$.hasValue()
+        ? store.boardRequest$.value().teamBoards
         : undefined,
     ),
     shipTypes: computed<Partial<Record<ShipType, Ship>>>(() =>
@@ -104,6 +111,13 @@ export const BoardStore = signalStore(
       pipe(
         tap((teamBoard: TeamBoard | undefined) =>
           patchState(store, { teamBoard }),
+        ),
+      ),
+    ),
+    setTeamBoards: rxMethod<Record<string, TeamBoard> | undefined>(
+      pipe(
+        tap((teamBoards: Record<string, TeamBoard> | undefined) =>
+          patchState(store, { teamBoards }),
         ),
       ),
     ),
@@ -188,11 +202,64 @@ export const BoardStore = signalStore(
         }),
       ),
     ),
+    adminAttack: rxMethod<AdminAttack>(
+      pipe(
+        tap(() => patchState(store, { updateInProgress: true })),
+        switchMap((attack) =>
+          store.service.adminAttack(attack).pipe(
+            tapResponse({
+              next: (response: { attack: Attack }) => {
+                const oldBoard = store.teamBoards()?.[attack.attackingTeam];
+                if (oldBoard) {
+                  const teamBoard = { ...oldBoard };
+                  teamBoard.attacksByTeam = {
+                    ...(teamBoard.attacksByTeam || {}),
+                    [getCellKey(response.attack)]: response.attack,
+                  };
+                  patchState(store, { teamBoard, updateInProgress: false });
+                }
+              },
+              error: (err) => {
+                patchState(store, { updateInProgress: false });
+                console.error('Error performing attack:', err);
+              },
+            }),
+          ),
+        ),
+      ),
+    ),
+    clearAttack: rxMethod<{ x: number; y: number; teamId: string }>(
+      pipe(
+        tap(() => patchState(store, { updateInProgress: true })),
+        switchMap((body) =>
+          store.service.clearAttack(body).pipe(
+            tapResponse({
+              next: () => {
+                const oldBoard = store.teamBoards()?.[body.teamId];
+                if (oldBoard) {
+                  const teamBoard = { ...oldBoard };
+                  const cellKey = `${body.x},${body.y}`;
+                  if (teamBoard.attacksByTeam) {
+                    delete teamBoard.attacksByTeam[cellKey];
+                  }
+                  patchState(store, { teamBoard, updateInProgress: false });
+                }
+              },
+              error: (err) => {
+                patchState(store, { updateInProgress: false });
+                console.error('Error clearing attack:', err);
+              },
+            }),
+          ),
+        ),
+      ),
+    ),
   })),
   withHooks({
     onInit: (store) => {
       store.setBoard(store.board$);
       store.setTeamBoard(store.teamBoard$);
+      store.setTeamBoards(store.teamBoards$);
     },
   }),
 );

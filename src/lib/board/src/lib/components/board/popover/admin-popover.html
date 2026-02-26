@@ -22,5 +22,46 @@
       </button>
       <button nz-button nzType="primary" (click)="save()">Save</button>
     </div>
+    <div class="flex flex-row gap-4">
+      <div class="flex flex-col gap-2">
+        <span>Team 1 Attack:</span>
+        <input
+          class="w-[200px]"
+          nz-input
+          type="text"
+          [value]="attacks()['team-1']?.rsn || ''"
+          (input)="rsnChanged('team-1', $event.target.value)"
+        />
+        @if (attacks()['team-1']) {
+        <button nz-button nzType="default" (click)="clear('team-1')">
+          Reset for Team 1
+        </button>
+        } @else {
+        <button nz-button nzType="default" (click)="attack('team-1')">
+          Claim for Team 1
+        </button>
+        }
+      </div>
+      <div class="flex flex-col gap-2">
+        <span>Team 2 Attack:</span>
+        <input
+          class="w-[200px]"
+          nz-input
+          type="text"
+          [value]="attacks()['team-2']?.rsn || ''"
+          (input)="rsnChanged('team-2', $event.target.value)"
+        />
+        @if (attacks()['team-2']) {
+        <button nz-button nzType="default" (click)="clear('team-2')">
+          Reset for Team 2
+        </button>
+        } @else {
+        <button nz-button nzType="default" (click)="attack('team-2')">
+          Claim for Team 2
+        </button>
+        }
+      </div>
+    </div>
+    <hr />
   </div>
 </div>
