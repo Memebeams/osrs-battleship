@@ -1,4 +1,6 @@
 <p class="text-center">{{ cell().description }}</p>
 @if (cell().state === 'hit') {
 <p class="text-red-500 text-center">Hit by {{ cell().attacker }}!</p>
+} @if (cell().state === 'miss') {
+<p class="text-red-500 text-center">Miss by {{ cell().attacker }}...</p>
 }
