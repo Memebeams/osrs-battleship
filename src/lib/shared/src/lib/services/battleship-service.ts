@@ -10,6 +10,7 @@ import { Config } from '../environments/config';
 export interface BoardResponse {
   shipTypes: { [key in ShipType]: Ship };
   cutOffDate: string;
+  endDate: string;
   board: Board;
   teamBoard: TeamBoard;
   hitSrc: string;
